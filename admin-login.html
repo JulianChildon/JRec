@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>管理员登录</title>
+<link rel="stylesheet" href="style.css">
+<style>
+
+body{background:#0b1220;color:#e6ebff;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;margin:0}
+.shell{max-width:480px;margin:8vh auto;padding:20px}
+.card{background:rgba(255,255,255,.04);padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,.08)}
+label{display:block;font-size:14px;color:#8fa1c7;margin:6px 0}
+input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#e6ebff}
+input:focus{outline:none;border-color:#6ea8fe;box-shadow:0 0 0 3px rgba(110,168,254,.25)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));color:#e6ebff;font-weight:600;cursor:pointer}
+.hint{color:#8fa1c7;font-size:13px}
+.err{color:#ff6b6b;margin:8px 0 0}
+.center{display:flex;justify-content:center}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.brand .site-title{font-weight:700}
+</style>
+<script defer src="auth.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <img src="https://static-data.gaokao.cn/upload/logo/290.jpg" alt="logo" style="width:40px;height:40px;border-radius:10px">
+      <div class="site-title">校园社团招新 · 管理端</div>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">管理员登录</h2>
+      <form id="loginForm">
+        <label for="username">管理员账号</label>
+        <input id="username" name="username" autocomplete="username" placeholder="如：admin / lead" required>
+        <label for="password">密码</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" required>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:14px">
+          <button class="btn" type="submit">登录</button>
+          <div class="hint">仅限已授权管理员使用</div>
+        </div>
+        <p id="error" class="err" style="display:none"></p>
+      </form>
+    </div>
+    <p class="hint center" style="margin-top:12px">忘记密码？联系系统负责人重置。</p>
+  </div>
+
+<script>
+  (function() {{
+    const form = document.getElementById('loginForm');
+    const err = document.getElementById('error');
+    form.addEventListener('submit', async (e) => {{
+      e.preventDefault();
+      err.style.display = 'none';
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      try {{
+        await Auth.login(username, password);
+        const params = new URLSearchParams(location.search);
+        const back = params.get('redirect') || 'admin.html';
+        location.replace(back);
+      }} catch (e) {{
+        err.textContent = e.message || '登录失败';
+        err.style.display = 'block';
+      }}
+    }});
+  }})();
+</script>
+</body>
+</html>

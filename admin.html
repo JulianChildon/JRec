@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>管理员管理端</title>
+<link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
+</head>
+<body>
+
+<div id="userBar" style="position:fixed;top:12px;right:12px;z-index:9998;display:flex;gap:10px;align-items:center;background:rgba(15,23,42,.85);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35)">
+  <span style="font-size:14px;color:#8fa1c7">👤 管理员：<strong id="adminName" style="color:#e6ebff">…</strong></span>
+  <a id="userMgmtBtn" class="btn" href="admin-users.html" style="display:none;">用户管理</a>
+  <button id="logoutBtn" class="btn" style="padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));color:#e6ebff;cursor:pointer">退出登录</button>
+</div>
+<script>
+(async () => {
+  if (!window.Auth) return;
+  const u = await Auth.getSessionUser();
+  const nameEl = document.getElementById('adminName');
+  if (u && nameEl) nameEl.textContent = u;
+  const btn = document.getElementById('logoutBtn');
+  if (btn) btn.addEventListener('click', () => Auth.logout(true));
+  window.addEventListener('keydown', (e) => {
+    if (e.altKey && (e.key === 'l' || e.key === 'L')) {
+      e.preventDefault();
+      Auth.logout(true);
+    }
+  });
+  // super 才显示用户管理
+  const role = Auth.getUserRole(u || '');
+  if (role === 'super') {
+    const mg = document.getElementById('userMgmtBtn');
+    if (mg) mg.style.display = 'inline-flex';
+  }
+})();
+</script>
+
+<script>if(window.Auth){Auth.requireAuth();}else{window.addEventListener('load',()=>Auth&&Auth.requireAuth());}</script>
+
+<script>document.documentElement.style.visibility='hidden';</script>
+<script>window.addEventListener('DOMContentLoaded',()=>{});</script>
+
+<div class="shell">
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">🧑‍💼</div>
+      <div>
+        <div class="site-title">负责人管理端</div>
+        <div class="site-sub">查看与管理申请</div>
+      </div>
+    </div>
+    <a href="index.html" class="btn">返回首页</a>
+  </header>
+
+  <main class="content">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <h3>申请信息列表</h3>
+        <div class="muted" id="applicationCount">0 条申请</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button id="exportJson" class="btn">导出 JSON</button>
+        <button id="clearAll" class="btn danger">清空所有</button>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>学号</th><th>姓名</th><th>专业</th><th>年级</th><th>意向社团</th>
+            <th>电话</th><th>邮箱</th><th>自我介绍</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="applicationsTable">
+          <tr><td colspan="8" class="muted">暂无申请数据</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- 编辑弹窗 -->
+<div id="modal" class="modal-backdrop" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <h3>编辑申请</h3>
+      <form id="editForm">
+        <input type="hidden" id="editIndex">
+        <label>学号 <input id="editStudentId" required></label>
+        <label>姓名 <input id="editName" required></label>
+        <label>专业 <input id="editMajor" required></label>
+        <label>年级
+          <select id="editGrade" required>
+            <option>大一</option><option>大二</option><option>大三</option>
+            <option>大四</option><option>研究生</option>
+          </select>
+        </label>
+        <label>电话 <input id="editPhone" required></label>
+        <label>邮箱 <input id="editEmail" type="email" required></label>
+        <label>自我介绍 <textarea id="editIntroduction" required></textarea></label>
+        <label>意向社团 <input id="editClub" required></label>
+        <div style="display:flex;gap:12px;justify-content:flex-end;">
+          <button type="button" id="closeModal" class="btn">取消</button>
+          <button type="submit" class="btn primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+<script>(async()=>{if(window.Auth){const u=await Auth.getSessionUser();
+ if(u){document.documentElement.style.visibility='visible';}})();</script>
+</body>
+</html>

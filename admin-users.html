@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>管理员管理</title>
+<link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
+</head>
+<body>
+<script>
+  // 访问控制：仅 super 可进
+  (async () => {
+    if (!window.Auth) return;
+    await Auth.requireAuth();
+    const u = await Auth.getSessionUser();
+    if (!u || Auth.getUserRole(u) !== 'super') {
+      alert('仅限超级管理员访问');
+      location.replace('admin.html');
+    }
+  })();
+</script>
+
+<div class="shell">
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">🔐</div>
+      <div>
+        <div class="site-title">管理员管理</div>
+        <div class="site-sub">新增/启停/重置密码/邀请</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-left:auto">
+      <a href="admin.html" class="btn">返回管理端</a>
+      <button id="logoutBtn" class="btn danger">退出登录</button>
+    </div>
+  </header>
+
+  <main class="content" style="display:grid;gap:16px">
+    <section class="card">
+      <h2>现有管理员</h2>
+      <div class="table-wrap" style="margin-top:10px;">
+        <table>
+          <thead>
+            <tr><th>用户名</th><th>角色</th><th>启用</th><th>来源</th><th>创建时间</th><th>操作</th></tr>
+          </thead>
+          <tbody id="adminTable"><tr><td colspan="6" class="muted">加载中…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>新增管理员</h2>
+      <form id="addForm" style="display:grid;gap:10px;max-width:560px">
+        <label>用户名 <input id="addUsername" required placeholder="如：alice"></label>
+        <label>初始密码 <input id="addPassword" required type="password" placeholder="建议12位以上"></label>
+        <label>角色
+          <select id="addRole">
+            <option value="manager">manager</option>
+            <option value="super">super</option>
+          </select>
+        </label>
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button type="submit" class="btn primary">新增</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>生成邀请链接（可选）</h2>
+      <form id="inviteForm" style="display:grid;gap:10px;max-width:560px">
+        <label>用户名 <input id="inviteU" required placeholder="如：bob"></label>
+        <label>角色
+          <select id="inviteRole">
+            <option value="manager">manager</option>
+            <option value="super">super</option>
+          </select>
+        </label>
+        <label>有效期（分钟） <input id="inviteTTL" type="number" min="5" value="60" required></label>
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button type="submit" class="btn">生成链接</button>
+        </div>
+        <div id="inviteOut" class="muted" style="word-break:break-all"></div>
+      </form>
+      <p class="muted" style="margin-top:6px">受邀者打开链接后，在 <code>admin-accept.html</code> 上设置密码即可开通。</p>
+    </section>
+  </main>
+</div>
+
+<script src="admin-users.js"></script>
+</body>
+</html>

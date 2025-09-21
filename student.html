@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>学生申请端</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="student">
+<div class="shell">
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">🎓</div>
+      <div>
+        <div class="site-title">学生申请端</div>
+        <div class="site-sub">填写并提交申请</div>
+      </div>
+    </div>
+    <a href="index.html" class="btn">返回首页</a>
+  </header>
+
+  <main class="content">
+    <div class="card">
+      <h2>学生申请表单</h2>
+      <form id="studentForm">
+        <div class="row">
+          <div class="col">
+            <label for="name">姓名</label>
+            <input id="name" type="text" required>
+          </div>
+          <div class="col">
+            <label for="studentId">学号</label>
+            <input id="studentId" type="text" required>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <div class="col">
+            <label for="major">专业</label>
+            <input id="major" type="text" required>
+          </div>
+          <div class="col">
+        <label for="grade">年级</label>
+        <select id="grade" required style="color: rgb(6, 254, 14);">
+          <option style="color: black;">大一</option>
+          <option style="color: black;">大二</option>
+          <option style="color: black;">大三</option>
+          <option style="color: black;">大四</option>
+          <option style="color: black;">研究生</option>
+        </select>
+          </div>
+        </div>
+
+        <label for="phone" style="margin-top:12px;display:block;">电话</label>
+        <input id="phone" type="tel" required>
+        <label for="club" style="margin-top:12px;display:block;">意向社团</label>
+        <input id="club" type="text" required>
+
+        <label for="email" style="margin-top:12px;display:block;">邮箱</label>
+        <input id="email" type="email" required>
+
+        <label for="introduction" style="margin-top:12px;display:block;">自我介绍</label>
+        <textarea id="introduction" required></textarea>
+
+        <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:14px;">
+          <a href="index.html" class="btn">取消</a>
+          <button type="submit" class="submit">提交申请</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="student.js"></script>
+</body>
+</html>

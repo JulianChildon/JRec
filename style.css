@@ -1,0 +1,172 @@
+/* 设计令牌 */
+:root{
+  --bg:#0b1220;
+  --panel:#111a2b;
+  --panel-2:#0e1626;
+  --text:#e6ebff;
+  --muted:#8fa1c7;
+  --brand:#6ea8fe;
+  --brand-2:#87e0ff;
+  --accent:#b389ff;
+  --success:#46d39a;
+  --danger:#ff6b6b;
+  --border:rgba(255,255,255,.08);
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:16px;
+  --gap:16px;
+}
+
+/* 基础重置与排版 */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  color:var(--text);
+  /* 仅保留顶部柔光；底部为纯色 --bg */
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(110,168,254,.15), transparent 60%),
+    var(--bg);
+  background-repeat: no-repeat;
+}
+
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.muted{color:var(--muted)}
+
+/* 布局容器 */
+.shell{max-width:1080px;margin:0 auto;padding:20px}
+
+/* 顶部区 */
+.app-header{
+  display:flex;align-items:center;justify-content:flex-start;
+  gap:14px;padding:12px 0;border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:48px;height:48px;border-radius:12px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(22, 1, 1, 0.25))}
+.site-title{font-size:20px;font-weight:700}
+.site-sub{font-size:13px;color:var(--muted)}
+
+/* 首页：左右分屏入口 */
+.hero{
+  display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);
+  margin:24px 0 10px;
+}
+.entry{
+  --mx:60%;
+  --my:40%;
+  position:relative;
+  display:block;
+  border-radius:calc(var(--radius) + 2px);
+  padding:28px 28px 24px;
+  min-height:260px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  transform:translateZ(0); /* 开启硬件加速，提升 hover 流畅度 */
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.entry:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.45);border-color:rgba(255,255,255,.14)}
+.entry-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;letter-spacing:.4px;
+  padding:6px 10px;border-radius:999px;
+  background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text)
+}
+.entry-title{margin:12px 0 6px;font-size:28px;line-height:1.2}
+.entry-desc{margin:0 0 16px;color:var(--muted)}
+.entry-cta{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:10px 16px;border-radius:12px;font-weight:600;
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* 学生端卡片：柔和蓝紫渐变 */
+.entry--student{
+  background:
+    radial-gradient(800px 400px at 10% 10%, rgba(110,168,254,.18), transparent 55%),
+    radial-gradient(700px 400px at 90% 80%, rgba(179,137,255,.16), transparent 55%),
+    linear-gradient(180deg, var(--panel), var(--panel-2));
+}
+
+/* 管理端卡片：跟随指针的高光（配合 index.html 的脚本） */
+.entry--admin{
+  background:
+    radial-gradient(250px 250px at var(--mx) var(--my), rgba(255,255,255,.16), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(135,224,255,.12), transparent 60%),
+    linear-gradient(180deg, #172238, #0f172a 55%, #0c1426);
+}
+
+/* 页脚 */
+.footer{padding:24px 0;border-top:1px solid var(--border);margin-top:16px}
+
+/* 按钮体系（a 或 button 通用） */
+.btn, .submit, .btn.primary{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:9px 14px;border-radius:10px;border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+  color:var(--text);cursor:pointer;font-weight:600;transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.btn:hover, .submit:hover, .btn.primary:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(0,0,0,.35);border-color:rgba(255,255,255,.14)}
+.btn.primary, .submit{background:linear-gradient(180deg, rgba(110,168,254,.35), rgba(110,168,254,.10)); border-color:rgba(110,168,254,.45)}
+.btn.danger{background:linear-gradient(180deg, rgba(255,107,107,.30), rgba(255,107,107,.08)); border-color:rgba(255,107,107,.5)}
+.btn:disabled, .submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* 内容、卡片、表单（student.html 复用） */
+.content{padding:22px 0}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)
+}
+.card h2{margin:0 0 12px}
+
+/* 表单 */
+form label{display:block;font-size:14px;color:var(--muted);margin:6px 0 6px}
+input, select, textarea{
+  width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text);outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+input:focus, select:focus, textarea:focus{border-color:rgba(110,168,254,.55);box-shadow:0 0 0 3px rgba(110,168,254,.25)}
+textarea{min-height:120px;resize:vertical}
+
+/* 栅格 */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{display:flex;flex-direction:column}
+
+/* 表格（admin.html 复用） */
+.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.02)}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px}
+thead th{
+  position:sticky;top:0;background:rgba(15,23,42,.85);backdrop-filter:blur(6px);
+  text-align:left;font-weight:700;padding:10px;border-bottom:1px solid var(--border)
+}
+tbody td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+
+/* 弹窗（admin.html 复用） */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;z-index:50
+}
+.modal-dialog{width:min(720px,92%);padding:0 12px}
+.modal-content{
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)
+}
+.modal-content h3{margin:0 0 10px}
+.modal-content form label{margin:8px 0}
+
+/* 响应式 */
+@media (max-width: 880px){
+  .hero{grid-template-columns:1fr}
+  .entry{min-height:220px}
+  .row{grid-template-columns:1fr}
+  .site-title{font-size:18px}
+  .site-sub{font-size:12px}
+}
+.logoutArea { margin-left: auto; display: none; }
+
+

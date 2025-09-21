@@ -1,0 +1,130 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+<script src="auth.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>校园社团招新 — 首页</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+  <header class="app-header">
+  <div class="brand">
+    <img src="https://static-data.gaokao.cn/upload/logo/290.jpg" alt="社团Logo" class="logo">
+    <div>
+      <div class="site-title">GDUFS社团招新</div>
+      <div class="site-sub">明德尚行 学贯中西</div>
+    </div>
+  </div>
+
+  <!-- 动态插入：仅 super 可见 -->
+  <nav id="adminNav" style="display:none;margin-left:auto;margin-right:10px;display:flex;gap:10px;">
+    <a id="userMgmtLink" class="btn" href="admin-users.html" title="管理员管理" style="display:none;">用户管理</a>
+  </nav>
+
+  <div id="logoutArea" style="margin-left:auto;display:none;">
+    <button id="logoutBtn" class="btn danger">退出管理员</button>
+  </div>
+</header>
+
+  <main class="hero">
+    <div class="hero-left">
+      <a class="entry entry--student" href="student.html" aria-label="进入学生申请端">
+        <div class="entry-badge">🎓 STUDENT</div>
+        <h1 class="entry-title">学生申请端</h1>
+        <p class="entry-desc">填写表单并提交报名信息</p>
+        <span class="entry-cta">进入</span>
+      </a>
+    </div>
+
+    <div class="hero-right">
+      <a class="entry entry--admin" href="admin.html" aria-label="进入负责人管理端">
+        <div class="entry-badge">🧑‍💼 ADMIN</div>
+        <h1 class="entry-title">负责人管理端</h1>
+        <p class="entry-desc">查看、编辑、导出与清空申请</p>
+        <span class="entry-cta">进入</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="muted" > 2025 广外社团招新</div>
+  </footer>
+</div>
+<div id="logoutSuccessModal" class="modal-backdrop" style="display:none">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <h3>退出成功</h3>
+      <p class="muted">您已安全退出管理员账号。</p>
+      <div style="text-align:right;margin-top:12px;">
+        <button id="logoutOkBtn" class="btn">知道了</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (async () => {
+    if (!window.Auth) return;
+    const user = await Auth.getSessionUser();
+    if (user) {
+      // 显示登出
+      const area = document.getElementById('logoutArea');
+      const btn = document.getElementById('logoutBtn');
+      if (area && btn) {
+        area.style.display = 'block';
+        btn.addEventListener('click', () => {
+          Auth.logout(false);
+          sessionStorage.setItem('logout_ok', '1');
+          location.replace('index.html');
+        });
+      }
+      // 若为 super，展示“用户管理”
+      const role = Auth.getUserRole(user);
+      if (role === 'super') {
+        const link = document.getElementById('userMgmtLink');
+        if (link) link.style.display = 'inline-flex';
+        const nav = document.getElementById('adminNav');
+        if (nav) nav.style.display = 'flex';
+      }
+    }
+  })();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (sessionStorage.getItem('logout_ok') === '1') {
+      sessionStorage.removeItem('logout_ok');
+      const modal = document.getElementById('logoutSuccessModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        const ok = document.getElementById('logoutOkBtn');
+        if (ok) ok.addEventListener('click', () => { modal.style.display = 'none'; });
+        setTimeout(() => {
+          if (modal.style.display !== 'none') modal.style.display = 'none';
+        }, 2200);
+      } else {
+        alert('退出成功');
+      }
+    }
+  });
+
+  // 动态高光（原有）
+  (() => {
+    const admin = document.querySelector('.hero-right .entry--admin');
+    if (!admin) return;
+    function move(e){
+      const r = admin.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      admin.style.setProperty('--mx', x + '%');
+      admin.style.setProperty('--my', y + '%');
+    }
+    admin.addEventListener('pointermove', move);
+    admin.addEventListener('pointerleave', () => {
+      admin.style.setProperty('--mx','60%');
+      admin.style.setProperty('--my','40%');
+    });
+  })();
+</script>
+</body>
+</html>
