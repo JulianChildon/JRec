@@ -12,17 +12,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function sourceOf(rec) {
-    // 有 salt 视为“运行时覆盖/新增”，否则为“编译期默认”
     return rec.salt ? 'runtime' : 'builtin';
   }
 
   function listAdmins() {
-    const eff = (Auth.getUserRecord && Auth.getUserRecord) ? null : null; // 占位
-    // 从 Auth.effectiveUsers 的组合逻辑复用：我们直接从两个来源渲染
-    // 由于没有公开 effectiveUsers，这里用用户名合集重新抓取
-    const builtins = ['admin','lead']; // 与编译期一致；如需自动化可在 auth.js 暴露列表
+    const eff = (Auth.getUserRecord && Auth.getUserRecord) ? null : null;
+    const builtins = ['admin','lead'];
     const names = new Set(builtins);
-    // 从注册表里再收集
+
     try {
       const regRaw = localStorage.getItem('admin_users_v1');
       if (regRaw) {
@@ -30,13 +27,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         Object.keys(parsed?.reg?.users || {}).forEach(n => names.add(n));
       }
     } catch {}
-    // 构造记录
+
     const arr = [];
     names.forEach(n => {
       const rec = Auth.getUserRecord(n);
       if (rec) arr.push({ name:n, ...rec });
     });
-    // 排序：super 在前，其次按名称
+
     arr.sort((a,b) => (a.role === 'super' ? -1 : 1) - (b.role === 'super' ? -1 : 1) || a.name.localeCompare(b.name));
     return arr;
   }

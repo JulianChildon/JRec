@@ -1,17 +1,17 @@
 (() => {
-  const SECRET = "418c96e3c27bcea99c334435811cc220"; // client-visible; integrity only
+  const SECRET = "418c96e3c27bcea99c334435811cc220";
 
-  // 编译期内置管理员（保持原样）
+
   const ADMINS = {
     "admin": {"hash":"6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25","role":"super","enabled":true},
     "lead":  {"hash":"27248aceef232db7d65391402cd725422a95a93582f9890d47e640483ad04a30","role":"manager","enabled":true}
   };
 
   const STORE_KEY = "admin_session_v1";
-  const REGISTRY_KEY = "admin_users_v1"; // 运行时管理员名册
-  const TTL_MIN = 120; // session lifetime
+  const REGISTRY_KEY = "admin_users_v1";
+  const TTL_MIN = 120;
 
-  // ===== 基础工具 =====
+
   function randomHex(n = 16) {
     const a = new Uint8Array(n);
     crypto.getRandomValues(a);
@@ -28,13 +28,13 @@
     return sha256Hex(JSON.stringify(obj) + SECRET);
   }
 
-  // ===== 运行时管理员注册表 =====
+
   function getRegistry() {
     const raw = localStorage.getItem(REGISTRY_KEY);
     if (!raw) return { version: 1, users: {} };
     try {
       const { reg, sig } = JSON.parse(raw);
-      // 异步完整性提示（不阻塞）
+
       sign(reg).then(x => { if (x !== sig) console.warn("[auth] registry integrity check failed"); });
       return reg || { version: 1, users: {} };
     } catch {
@@ -86,7 +86,7 @@
     const u = (username || "").trim().toLowerCase();
     const reg = getRegistry();
     if (!reg.users || !reg.users[u]) {
-      // 若是编译期账号，也允许通过注册表覆盖（实现“重置”）
+
       if (!reg.users) reg.users = {};
       const salt = randomHex(16);
       const hash = await sha256Hex(`${salt}:${newPassword}`);
@@ -105,7 +105,7 @@
     const u = (username || "").trim().toLowerCase();
     const reg = getRegistry();
     if (!reg.users || !reg.users[u]) {
-      // 若为编译期账号，创建覆盖条目以控制启停
+
       if (!ADMINS[u]) throw new Error("用户不存在");
       if (!reg.users) reg.users = {};
       const base = ADMINS[u];
@@ -115,7 +115,7 @@
     await saveRegistry(reg);
   }
 
-  // 邀请：生成/接受（完整性提示级别）
+
   async function generateInvite({ u, role = "manager", ttlMinutes = 60 }) {
     const token = { u: (u||"").trim().toLowerCase(), role, exp: Date.now() + ttlMinutes*60_000, n: randomHex(12) };
     const sig = await sign(token);
@@ -130,7 +130,7 @@
     return addAdmin(token.u, password, token.role);
   }
 
-  // ===== 会话存取 =====
+
   function readSession() {
     try { return JSON.parse(localStorage.getItem(STORE_KEY) || "null"); }
     catch (e) { return null; }
@@ -156,13 +156,13 @@
     return sig2 === sess.sig && !!rec && !!rec.enabled;
   }
 
-  // ===== 对外 API =====
+
   async function login(username, password) {
     const u = (username || "").trim().toLowerCase();
     const rec = getUserRecord(u);
     if (!rec || !rec.enabled) throw new Error("未授权的管理员或账号已被禁用");
 
-    // 兼容旧账号（无盐：编译期 ADMINS；有盐：运行时注册表）
+
     let ok = false;
     if (rec.salt) {
       const h = await sha256Hex(`${rec.salt}:${password || ""}`);
@@ -214,13 +214,13 @@
   }
 
   window.Auth = {
-    // 认证
+
     login, requireAuth, logout, getSessionUser,
-    // 管理员信息/权限
+
     getUserRole, hasRole, getUserRecord,
-    // 运行时管理
+
     addAdmin, setPassword, setEnabled,
-    // 邀请
+
     generateInvite, acceptInvite
   };
   injectLogoutButton();

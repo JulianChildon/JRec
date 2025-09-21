@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
 <script src="auth.js"></script>
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <!-- 动态插入：仅 super 可见 -->
+
   <nav id="adminNav" style="display:none;margin-left:auto;margin-right:10px;display:flex;gap:10px;">
     <a id="userMgmtLink" class="btn" href="admin-users.html" title="管理员管理" style="display:none;">用户管理</a>
   </nav>
@@ -69,7 +69,7 @@
     if (!window.Auth) return;
     const user = await Auth.getSessionUser();
     if (user) {
-      // 显示登出
+
       const area = document.getElementById('logoutArea');
       const btn = document.getElementById('logoutBtn');
       if (area && btn) {
@@ -80,7 +80,7 @@
           location.replace('index.html');
         });
       }
-      // 若为 super，展示“用户管理”
+
       const role = Auth.getUserRole(user);
       if (role === 'super') {
         const link = document.getElementById('userMgmtLink');
@@ -108,7 +108,7 @@
     }
   });
 
-  // 动态高光（原有）
+
   (() => {
     const admin = document.querySelector('.hero-right .entry--admin');
     if (!admin) return;

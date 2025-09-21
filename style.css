@@ -1,4 +1,4 @@
-/* 设计令牌 */
+
 :root{
   --bg:#0b1220;
   --panel:#111a2b;
@@ -16,14 +16,14 @@
   --gap:16px;
 }
 
-/* 基础重置与排版 */
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
   font:16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   color:var(--text);
-  /* 仅保留顶部柔光；底部为纯色 --bg */
+
   background:
     radial-gradient(1200px 600px at 80% -10%, rgba(110,168,254,.15), transparent 60%),
     var(--bg);
@@ -34,10 +34,10 @@ a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 .muted{color:var(--muted)}
 
-/* 布局容器 */
+
 .shell{max-width:1080px;margin:0 auto;padding:20px}
 
-/* 顶部区 */
+
 .app-header{
   display:flex;align-items:center;justify-content:flex-start;
   gap:14px;padding:12px 0;border-bottom:1px solid var(--border);
@@ -47,7 +47,7 @@ img{display:block;max-width:100%}
 .site-title{font-size:20px;font-weight:700}
 .site-sub{font-size:13px;color:var(--muted)}
 
-/* 首页：左右分屏入口 */
+
 .hero{
   display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);
   margin:24px 0 10px;
@@ -63,7 +63,7 @@ img{display:block;max-width:100%}
   overflow:hidden;
   border:1px solid var(--border);
   box-shadow:var(--shadow);
-  transform:translateZ(0); /* 开启硬件加速，提升 hover 流畅度 */
+  transform:translateZ(0);
   transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 .entry:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.45);border-color:rgba(255,255,255,.14)}
@@ -83,7 +83,7 @@ img{display:block;max-width:100%}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-/* 学生端卡片：柔和蓝紫渐变 */
+
 .entry--student{
   background:
     radial-gradient(800px 400px at 10% 10%, rgba(110,168,254,.18), transparent 55%),
@@ -91,7 +91,7 @@ img{display:block;max-width:100%}
     linear-gradient(180deg, var(--panel), var(--panel-2));
 }
 
-/* 管理端卡片：跟随指针的高光（配合 index.html 的脚本） */
+
 .entry--admin{
   background:
     radial-gradient(250px 250px at var(--mx) var(--my), rgba(255,255,255,.16), transparent 60%),
@@ -99,10 +99,10 @@ img{display:block;max-width:100%}
     linear-gradient(180deg, #172238, #0f172a 55%, #0c1426);
 }
 
-/* 页脚 */
+
 .footer{padding:24px 0;border-top:1px solid var(--border);margin-top:16px}
 
-/* 按钮体系（a 或 button 通用） */
+
 .btn, .submit, .btn.primary{
   display:inline-flex;align-items:center;justify-content:center;
   padding:9px 14px;border-radius:10px;border:1px solid var(--border);
@@ -114,7 +114,7 @@ img{display:block;max-width:100%}
 .btn.danger{background:linear-gradient(180deg, rgba(255,107,107,.30), rgba(255,107,107,.08)); border-color:rgba(255,107,107,.5)}
 .btn:disabled, .submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-/* 内容、卡片、表单（student.html 复用） */
+
 .content{padding:22px 0}
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
@@ -122,7 +122,7 @@ img{display:block;max-width:100%}
 }
 .card h2{margin:0 0 12px}
 
-/* 表单 */
+
 form label{display:block;font-size:14px;color:var(--muted);margin:6px 0 6px}
 input, select, textarea{
   width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
@@ -132,11 +132,11 @@ input, select, textarea{
 input:focus, select:focus, textarea:focus{border-color:rgba(110,168,254,.55);box-shadow:0 0 0 3px rgba(110,168,254,.25)}
 textarea{min-height:120px;resize:vertical}
 
-/* 栅格 */
+
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .col{display:flex;flex-direction:column}
 
-/* 表格（admin.html 复用） */
+
 .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.02)}
 table{width:100%;border-collapse:separate;border-spacing:0;min-width:760px}
 thead th{
@@ -146,7 +146,7 @@ thead th{
 tbody td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
 tbody tr:hover{background:rgba(255,255,255,.03)}
 
-/* 弹窗（admin.html 复用） */
+
 .modal-backdrop{
   position:fixed;inset:0;background:rgba(0,0,0,.55);
   display:flex;align-items:center;justify-content:center;z-index:50
@@ -159,7 +159,7 @@ tbody tr:hover{background:rgba(255,255,255,.03)}
 .modal-content h3{margin:0 0 10px}
 .modal-content form label{margin:8px 0}
 
-/* 响应式 */
+
 @media (max-width: 880px){
   .hero{grid-template-columns:1fr}
   .entry{min-height:220px}

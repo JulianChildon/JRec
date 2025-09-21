@@ -9,7 +9,7 @@
 </head>
 <body>
 <script>
-  // 访问控制：仅 super 可进
+
   (async () => {
     if (!window.Auth) return;
     await Auth.requireAuth();

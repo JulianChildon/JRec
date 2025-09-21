@@ -1,6 +1,4 @@
-// 管理员端申请数据管理
 document.addEventListener('DOMContentLoaded', async () => {
-  // 本地存储键名（与student.js一致）
   const STORAGE_KEY = 'student_applications';
   const applicationsTable = document.getElementById('applicationsTable');
   const applicationCount = document.getElementById('applicationCount');
@@ -10,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const editForm = document.getElementById('editForm');
   const closeModalBtn = document.getElementById('closeModal');
 
-  // 获取所有申请数据
+
   function getApplications() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -19,13 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // 更新申请数据
+
   function updateApplications(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     renderApplications();
   }
 
-  // 渲染申请列表
+
   function renderApplications() {
     const applications = getApplications();
     applicationCount.textContent = `${applications.length} 条申请`;
@@ -52,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </tr>
     `).join('');
 
-    // 绑定编辑和删除按钮事件
+
     document.querySelectorAll('.edit-btn').forEach(btn => {
       btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.index)));
     });
@@ -62,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // 打开编辑弹窗
+
   function openEditModal(index) {
     const applications = getApplications();
     const app = applications[index];
@@ -82,13 +80,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     modal.style.display = 'flex';
   }
 
-  // 关闭编辑弹窗
+
   function closeEditModal() {
     modal.style.display = 'none';
     editForm.reset();
   }
 
-  // 删除申请
+
   function deleteApplication(index) {
     if (!confirm('确定要删除这条申请吗？')) return;
     
@@ -97,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateApplications(applications);
   }
 
-  // 导出JSON
+
   function exportToJson() {
     const applications = getApplications();
     const dataStr = JSON.stringify(applications, null, 2);
@@ -113,18 +111,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     URL.revokeObjectURL(url);
   }
 
-  // 清空所有数据
+
   function clearAllApplications() {
     if (!confirm('确定要清空所有申请数据吗？此操作不可撤销！')) return;
     updateApplications([]);
   }
 
-  // 初始化事件监听
+
   if (exportJsonBtn) exportJsonBtn.addEventListener('click', exportToJson);
   if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllApplications);
   if (closeModalBtn) closeModalBtn.addEventListener('click', closeEditModal);
   
-  // 编辑表单提交
+
   if (editForm) {
     editForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -149,6 +147,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // 初始渲染
+
   renderApplications();
 });
